@@ -1,6 +1,6 @@
-# Authentication System
+# Cake
 
-A modern authentication system built with Remix, featuring secure user management and authentication flows.
+Cake is a modern web application built with Remix.js.
 
 ## Technologies Used
 
@@ -75,7 +75,7 @@ npm run dev
 yarn dev
 ```
 
-The application will be available at `http://localhost:3000`
+The application will be available at `http://localhost:5173`
 
 ## Available Scripts
 
