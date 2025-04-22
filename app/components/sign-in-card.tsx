@@ -1,5 +1,3 @@
-"use client";
-
 import { Link } from "@remix-run/react";
 import { Key, Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -68,11 +66,15 @@ export default function SignInCard() {
           </div>
           <div className="flex items-center gap-2">
             <Checkbox
-              onClick={() => {
-                setRememberMe(!rememberMe);
+              id="remember-me"
+              name="remember-me"
+              aria-label="Remember me"
+              checked={rememberMe}
+              onCheckedChange={(checked) => {
+                setRememberMe(checked as boolean);
               }}
             />
-            <Label>Remember me</Label>
+            <Label htmlFor="remember-me">Remember me</Label>
           </div>
 
           <Button
@@ -101,7 +103,15 @@ export default function SignInCard() {
               );
             }}
           >
-            {loading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
+            {loading ? (
+              <Loader2
+                size={16}
+                className="animate-spin"
+                data-testid="loading-spinner"
+              />
+            ) : (
+              "Login"
+            )}
           </Button>
 
           <Button
