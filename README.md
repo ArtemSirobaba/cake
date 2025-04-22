@@ -2,6 +2,11 @@
 
 Cake is a modern web application built with Remix.js.
 
+## New Features
+
+- Added new feature demonstration file
+- Updated documentation to reflect recent changes
+
 ## Technologies Used
 
 - **Frontend Framework**: Remix.js (v2.15.0)
