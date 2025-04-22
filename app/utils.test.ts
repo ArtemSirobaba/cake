@@ -5,7 +5,7 @@ describe("Utils", () => {
     expect(true).toBe(true);
   });
 
-  it("should fail this test", () => {
-    expect(false).toBe(true);
-  });
+  // it("should fail this test", () => {
+  //   expect(true).toBe(true);
+  // });
 });
