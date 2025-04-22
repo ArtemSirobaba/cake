@@ -17,6 +17,7 @@ import QRCode from "react-qr-code";
 import { toast } from "sonner";
 import useSWR from "swr";
 import { UAParser } from "ua-parser-js";
+
 import { authClient, signOut, useSession } from "~/lib/auth-client";
 import { Session } from "~/lib/auth-types";
 import { Alert, AlertDescription, AlertTitle } from "~/ui/alert";
@@ -53,20 +54,22 @@ import {
 } from "~/ui/table";
 
 export default function UserCard() {
-  const { data, isPending, error } = useSession();
-  const [ua, setUa] = useState<UAParser.UAParserInstance>();
+  const { data } = useSession();
+  const [setUa] = useState<UAParser.UAParserInstance | null>(null);
 
   const session = data;
 
   useEffect(() => {
-    setUa(new UAParser(session?.session.userAgent));
+    setUa(new UAParser(session?.session.userAgent || ""));
   }, [session?.session.userAgent]);
 
   const [isTerminating, setIsTerminating] = useState<string>();
 
   const { data: qr } = useSWR("/totp-uri", async () => {
     if (!session?.user.twoFactorEnabled) return null;
-    const res = await authClient.twoFactor.getTotpUri();
+    const res = await authClient.twoFactor.getTotpUri({
+      password: twoFaPassword,
+    });
     if (res.error) {
       throw res.error;
     }
@@ -114,7 +117,7 @@ export default function UserCard() {
             <AlertTitle>Verify Your Email Address</AlertTitle>
             <AlertDescription className="text-muted-foreground">
               Please verify your email address. Check your inbox for the
-              verification email. If you haven't received the email, click the
+              verification email. If you have not received the email, click the
               button below to resend.
             </AlertDescription>
             <Button
@@ -159,20 +162,23 @@ export default function UserCard() {
               return (
                 <div key={activeSession.id}>
                   <div className="flex items-center gap-2 text-sm  text-black font-medium dark:text-white">
-                    {new UAParser(activeSession.userAgent).getDevice().type ===
-                    "mobile" ? (
+                    {new UAParser(activeSession?.userAgent || "").getDevice()
+                      .type === "mobile" ? (
                       <MobileIcon />
                     ) : (
                       <Laptop size={16} />
                     )}
-                    {new UAParser(activeSession?.userAgent).getOS().name},{" "}
-                    {new UAParser(activeSession?.userAgent).getBrowser().name}
+                    {new UAParser(activeSession?.userAgent || "").getOS().name},{" "}
+                    {
+                      new UAParser(activeSession?.userAgent || "").getBrowser()
+                        .name
+                    }
                     <button
                       className="text-red-500 opacity-80  cursor-pointer text-xs border-muted-foreground border-red-600  underline "
                       onClick={async () => {
                         setIsTerminating(activeSession.id);
                         const res = await authClient.revokeSession({
-                          id: activeSession.id,
+                          token: activeSession.token,
                         });
 
                         if (res.error) {
@@ -287,8 +293,7 @@ export default function UserCard() {
                         }
                         setIsPendingTwoFa(true);
                         if (session?.user.twoFactorEnabled) {
-                          const res = await authClient.twoFactor.disable({
-                            //@ts-ignore
+                          await authClient.twoFactor.disable({
                             password: twoFaPassword,
                             fetchOptions: {
                               onError(context) {
@@ -655,7 +660,7 @@ function AddPasskey() {
 }
 
 function ListPasskeys() {
-  const { data, error } = authClient.useListPasskeys();
+  const { data } = authClient.useListPasskeys();
   const [isOpen, setIsOpen] = useState(false);
   const [passkeyName, setPasskeyName] = useState("");
 

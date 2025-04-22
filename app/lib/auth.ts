@@ -1,7 +1,6 @@
 import { betterAuth } from "better-auth";
 import { twoFactor } from "better-auth/plugins";
 import { passkey } from "better-auth/plugins/passkey";
-
 import Database from "better-sqlite3";
 
 export const auth = betterAuth({

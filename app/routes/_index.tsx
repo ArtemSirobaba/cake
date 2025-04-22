@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+
 import { auth } from "~/lib/auth";
 import { Session } from "~/lib/auth-types";
 import { Button } from "~/ui/button";

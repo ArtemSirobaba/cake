@@ -7,9 +7,10 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-
 import { Toaster } from "sonner";
+
 import { useSession } from "~/lib/auth-client";
+
 import { Logo } from "./components/logo";
 import "./tailwind.css";
 

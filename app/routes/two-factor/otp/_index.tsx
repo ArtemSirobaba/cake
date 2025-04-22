@@ -1,7 +1,6 @@
-"use client";
-
 import { AlertCircle, CheckCircle2, Mail } from "lucide-react";
 import { useState } from "react";
+
 import { authClient, useSession } from "~/lib/auth-client";
 import { Button } from "~/ui/button";
 import {
@@ -26,7 +25,7 @@ export default function Component() {
   const userEmail = session?.user?.email;
 
   const requestOTP = async () => {
-    const res = await authClient.twoFactor.sendOtp();
+    await authClient.twoFactor.sendOtp();
     // In a real app, this would call your backend API to send the OTP
     setMessage("OTP sent to your email");
     setIsError(false);

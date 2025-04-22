@@ -1,6 +1,7 @@
 import { Loader2, MessageSquare } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
 import { useSession } from "~/lib/auth-client";
 import { Avatar, AvatarFallback } from "~/ui/avatar";
 import { Button } from "~/ui/button";

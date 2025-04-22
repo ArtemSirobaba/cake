@@ -1,5 +1,6 @@
 import { json } from "@remix-run/node";
 import Database from "better-sqlite3";
+
 import { auth } from "~/lib/auth";
 
 const db = new Database("./sqlite.db");
