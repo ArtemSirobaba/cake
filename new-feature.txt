@@ -1,0 +1,2 @@
+This is a new feature file created as part of the GitHub Flow demonstration.
+The file contains some sample content to demonstrate the feature branch workflow. 
