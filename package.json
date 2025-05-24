@@ -12,7 +12,13 @@
     "typecheck": "tsc",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:api": "vitest run tests/api/",
+    "test:api:watch": "vitest tests/api/",
+    "test:api:coverage": "vitest run tests/api/ --coverage",
+    "test:unit": "vitest run app/ test/",
+    "test:all": "vitest run && vitest run tests/api/",
+    "postman:test": "newman run postman/auth-api-collection.json --reporters cli,json --reporter-json-export postman-results.json"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
