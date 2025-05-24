@@ -8,11 +8,14 @@
 
 ### 2. Посилання на коміт, що додає тести у репозиторій
 
+**Коміт:** `64ae43c - feat: Add Selenium IDE automated tests - comprehensive test suite with CI/CD integration`
+
 Тести додано у наступній структурі:
 
 - `selenium-tests/cake-app-tests.side` - основний файл з тестами
 - `selenium-tests/package.json` - конфігурація для запуску
 - `selenium-tests/README.md` - документація
+- `selenium-tests/run-tests.sh` - скрипт для запуску
 - `.github/workflows/selenium-tests.yml` - CI/CD інтеграція
 
 **Коміт буде створено після збереження всіх файлів.**

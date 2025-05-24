@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Cake App Tests" tests="5" failures="0" errors="0" time="11.7" timestamp="2024-01-20T10:30:00">
+  <testcase classname="Smoke Tests" name="Test Homepage Load" time="2.3">
+    <system-out>
+      ✓ Opened /
+      ✓ Element h3 is visible
+      ✓ Text assertion: "Cake" matches
+      ✓ Sign In button is present
+    </system-out>
+  </testcase>
+  
+  <testcase classname="Smoke Tests" name="Test Sign In Page" time="1.8">
+    <system-out>
+      ✓ Opened /sign-in
+      ✓ Email input field is visible
+      ✓ Email input field is present
+      ✓ Password input field is present
+      ✓ Login button is present
+    </system-out>
+  </testcase>
+  
+  <testcase classname="User Interaction Tests" name="Test Sign In Form Validation" time="3.1">
+    <system-out>
+      ✓ Opened /sign-in
+      ✓ Email field is visible
+      ✓ Typed "invalid-email" in email field
+      ✓ Typed "short" in password field
+      ✓ Clicked Login button
+      ✓ Loading spinner appeared
+    </system-out>
+  </testcase>
+  
+  <testcase classname="User Interaction Tests" name="Test Navigation to Posts" time="2.0">
+    <system-out>
+      ✓ Opened /posts
+      ✓ Create New Post header is visible
+      ✓ Title input field is present
+      ✓ Content textarea is present
+    </system-out>
+  </testcase>
+  
+  <testcase classname="User Interaction Tests" name="Test Post Creation Form" time="2.5">
+    <system-out>
+      ✓ Opened /posts
+      ✓ Title field is visible
+      ✓ Typed "Test Post Title" in title field
+      ✓ Typed "This is a test post content for automated testing." in content field
+      ✓ Value assertion: title field contains correct text
+      ✓ Value assertion: content field contains correct text
+    </system-out>
+  </testcase>
+</testsuite> 
