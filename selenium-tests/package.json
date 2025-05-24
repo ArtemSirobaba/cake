@@ -1,0 +1,24 @@
+{
+  "name": "selenium-ide-tests",
+  "version": "1.0.0",
+  "description": "Selenium IDE tests for Cake application",
+  "scripts": {
+    "test": "selenium-side-runner cake-app-tests.side",
+    "test:chrome": "selenium-side-runner --capabilities browserName=chrome cake-app-tests.side",
+    "test:firefox": "selenium-side-runner --capabilities browserName=firefox cake-app-tests.side",
+    "test:headless": "selenium-side-runner --capabilities browserName=chrome --capabilities 'goog:chromeOptions.args=[--headless,--no-sandbox,--disable-dev-shm-usage]' cake-app-tests.side",
+    "test:junit": "selenium-side-runner --output-directory=./test-results --output-format=junit cake-app-tests.side",
+    "test:ci": "npm run test:headless -- --output-directory=./test-results --output-format=junit"
+  },
+  "devDependencies": {
+    "selenium-side-runner": "^3.17.4"
+  },
+  "keywords": [
+    "selenium",
+    "testing",
+    "automation",
+    "e2e"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

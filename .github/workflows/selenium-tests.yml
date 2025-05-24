@@ -1,0 +1,69 @@
+name: Selenium IDE Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  selenium-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      app:
+        image: node:18
+        options: --health-cmd "curl -f http://localhost:5173 || exit 1" --health-interval 30s --health-timeout 10s --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install app dependencies
+        run: npm install
+
+      - name: Run database migrations
+        run: npm run auth:migrate
+
+      - name: Start application
+        run: |
+          npm run dev &
+          sleep 30
+        env:
+          NODE_ENV: test
+
+      - name: Wait for application to be ready
+        run: |
+          timeout 60 bash -c 'until curl -f http://localhost:5173; do sleep 2; done'
+
+      - name: Install Selenium dependencies
+        working-directory: ./selenium-tests
+        run: |
+          npm install
+          # Install ChromeDriver
+          npm install -g chromedriver
+
+      - name: Run Selenium tests
+        working-directory: ./selenium-tests
+        run: npm run test:ci
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: selenium-test-results
+          path: selenium-tests/test-results/
+
+      - name: Publish test results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Selenium IDE Tests
+          path: selenium-tests/test-results/*.xml
+          reporter: java-junit

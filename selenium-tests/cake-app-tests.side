@@ -1,0 +1,310 @@
+{
+  "id": "cake-app-tests",
+  "version": "2.0",
+  "name": "Cake App Tests",
+  "url": "http://localhost:5173",
+  "tests": [
+    {
+      "id": "test-homepage",
+      "name": "Test Homepage Load",
+      "commands": [
+        {
+          "id": "cmd1",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd2",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "css=h3",
+          "targets": [
+            ["css=h3", "css:finder"]
+          ],
+          "value": "5000"
+        },
+        {
+          "id": "cmd3",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=h3",
+          "targets": [
+            ["css=h3", "css:finder"]
+          ],
+          "value": "Cake"
+        },
+        {
+          "id": "cmd4",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=a[href*=\"sign-in\"] button",
+          "targets": [
+            ["css=a[href*=\"sign-in\"] button", "css:finder"]
+          ],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "test-signin-page",
+      "name": "Test Sign In Page",
+      "commands": [
+        {
+          "id": "cmd1",
+          "comment": "",
+          "command": "open",
+          "target": "/sign-in",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd2",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "css=input[type=\"email\"]",
+          "targets": [
+            ["css=input[type=\"email\"]", "css:finder"],
+            ["id=email", "id"]
+          ],
+          "value": "5000"
+        },
+        {
+          "id": "cmd3",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=input[type=\"email\"]",
+          "targets": [
+            ["css=input[type=\"email\"]", "css:finder"],
+            ["id=email", "id"]
+          ],
+          "value": ""
+        },
+        {
+          "id": "cmd4",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=input[name=\"password\"]",
+          "targets": [
+            ["css=input[name=\"password\"]", "css:finder"],
+            ["id=password", "id"]
+          ],
+          "value": ""
+        },
+        {
+          "id": "cmd5",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=button:contains(\"Login\")",
+          "targets": [
+            ["css=button:contains(\"Login\")", "css:finder"]
+          ],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "test-signin-form-validation",
+      "name": "Test Sign In Form Validation",
+      "commands": [
+        {
+          "id": "cmd1",
+          "comment": "",
+          "command": "open",
+          "target": "/sign-in",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd2",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "id=email",
+          "targets": [
+            ["id=email", "id"]
+          ],
+          "value": "5000"
+        },
+        {
+          "id": "cmd3",
+          "comment": "",
+          "command": "type",
+          "target": "id=email",
+          "targets": [
+            ["id=email", "id"]
+          ],
+          "value": "invalid-email"
+        },
+        {
+          "id": "cmd4",
+          "comment": "",
+          "command": "type",
+          "target": "id=password",
+          "targets": [
+            ["id=password", "id"]
+          ],
+          "value": "short"
+        },
+        {
+          "id": "cmd5",
+          "comment": "",
+          "command": "click",
+          "target": "css=button:contains(\"Login\")",
+          "targets": [
+            ["css=button:contains(\"Login\")", "css:finder"]
+          ],
+          "value": ""
+        },
+        {
+          "id": "cmd6",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "css=[data-testid=\"loading-spinner\"]",
+          "targets": [
+            ["css=[data-testid=\"loading-spinner\"]", "css:finder"]
+          ],
+          "value": "2000"
+        }
+      ]
+    },
+    {
+      "id": "test-navigation-to-posts",
+      "name": "Test Navigation to Posts",
+      "commands": [
+        {
+          "id": "cmd1",
+          "comment": "",
+          "command": "open",
+          "target": "/posts",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd2",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "css=h1:contains(\"Create New Post\")",
+          "targets": [
+            ["css=h1:contains(\"Create New Post\")", "css:finder"]
+          ],
+          "value": "5000"
+        },
+        {
+          "id": "cmd3",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "id=title",
+          "targets": [
+            ["id=title", "id"]
+          ],
+          "value": ""
+        },
+        {
+          "id": "cmd4",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "id=content",
+          "targets": [
+            ["id=content", "id"]
+          ],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "test-post-creation-form",
+      "name": "Test Post Creation Form",
+      "commands": [
+        {
+          "id": "cmd1",
+          "comment": "",
+          "command": "open",
+          "target": "/posts",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd2",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "id=title",
+          "targets": [
+            ["id=title", "id"]
+          ],
+          "value": "5000"
+        },
+        {
+          "id": "cmd3",
+          "comment": "",
+          "command": "type",
+          "target": "id=title",
+          "targets": [
+            ["id=title", "id"]
+          ],
+          "value": "Test Post Title"
+        },
+        {
+          "id": "cmd4",
+          "comment": "",
+          "command": "type",
+          "target": "id=content",
+          "targets": [
+            ["id=content", "id"]
+          ],
+          "value": "This is a test post content for automated testing."
+        },
+        {
+          "id": "cmd5",
+          "comment": "",
+          "command": "assertValue",
+          "target": "id=title",
+          "targets": [
+            ["id=title", "id"]
+          ],
+          "value": "Test Post Title"
+        },
+        {
+          "id": "cmd6",
+          "comment": "",
+          "command": "assertValue",
+          "target": "id=content",
+          "targets": [
+            ["id=content", "id"]
+          ],
+          "value": "This is a test post content for automated testing."
+        }
+      ]
+    }
+  ],
+  "suites": [
+    {
+      "id": "suite1",
+      "name": "Smoke Tests",
+      "persistSession": false,
+      "parallel": false,
+      "timeout": 300,
+      "tests": [
+        "test-homepage",
+        "test-signin-page"
+      ]
+    },
+    {
+      "id": "suite2",
+      "name": "User Interaction Tests",
+      "persistSession": false,
+      "parallel": false,
+      "timeout": 300,
+      "tests": [
+        "test-signin-form-validation",
+        "test-navigation-to-posts",
+        "test-post-creation-form"
+      ]
+    }
+  ],
+  "urls": [
+    "http://localhost:5173"
+  ],
+  "plugins": []
+} 
