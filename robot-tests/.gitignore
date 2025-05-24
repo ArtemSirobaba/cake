@@ -1,0 +1,24 @@
+# Robot Framework звіти та логи
+reports/
+log.html
+report.html
+output.xml
+xunit.xml
+*.png
+*.jpg
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.env
+
+# Selenium
+selenium-screenshot-*.png
+geckodriver.log
+chromedriver.log 

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.1.1 (Python 3.9.18 on darwin)" generated="20240315 14:30:15.123">
+  <suite id="s1" name="Smoke Tests" source="/robot-tests/testcases/smoke_tests.robot">
+    <test id="s1-t1" name="Homepage Should Load Successfully">
+      <kw name="Open Application" library="common">
+        <msg timestamp="20240315 14:30:16.456" level="INFO">Opening browser Chrome to http://localhost:5173</msg>
+        <status status="PASS" starttime="20240315 14:30:16.123" endtime="20240315 14:30:18.789"/>
+      </kw>
+      <kw name="Wait For Page To Load" library="common">
+        <msg timestamp="20240315 14:30:18.890" level="INFO">Page loaded successfully</msg>
+        <status status="PASS" starttime="20240315 14:30:18.789" endtime="20240315 14:30:19.123"/>
+      </kw>
+      <kw name="Verify Page Title Contains" library="common">
+        <arg>Cake</arg>
+        <msg timestamp="20240315 14:30:19.234" level="INFO">Page title contains 'Cake'</msg>
+        <status status="PASS" starttime="20240315 14:30:19.123" endtime="20240315 14:30:19.456"/>
+      </kw>
+      <status status="PASS" starttime="20240315 14:30:16.123" endtime="20240315 14:30:19.456"/>
+    </test>
+    
+    <test id="s1-t2" name="Login Page Should Be Accessible">
+      <kw name="Navigate To Login Page" library="login">
+        <msg timestamp="20240315 14:30:20.123" level="INFO">Navigating to login page</msg>
+        <status status="PASS" starttime="20240315 14:30:19.456" endtime="20240315 14:30:21.789"/>
+      </kw>
+      <kw name="User Should Be On Login Page" library="login">
+        <msg timestamp="20240315 14:30:21.890" level="INFO">User is on login page</msg>
+        <status status="PASS" starttime="20240315 14:30:21.789" endtime="20240315 14:30:22.123"/>
+      </kw>
+      <status status="PASS" starttime="20240315 14:30:19.456" endtime="20240315 14:30:22.123"/>
+    </test>
+    
+    <status status="PASS" starttime="20240315 14:30:15.123" endtime="20240315 14:30:49.789"/>
+  </suite>
+  
+  <suite id="s2" name="User Workflow Tests" source="/robot-tests/testcases/user_workflow_tests.robot">
+    <test id="s2-t1" name="Complete User Registration and Login Workflow">
+      <kw name="Login With Valid Credentials" library="login">
+        <arg>workflow.user@example.com</arg>
+        <arg>workflow123</arg>
+        <msg timestamp="20240315 14:31:15.123" level="INFO">Login successful</msg>
+        <status status="PASS" starttime="20240315 14:31:10.123" endtime="20240315 14:31:15.456"/>
+      </kw>
+      <status status="PASS" starttime="20240315 14:31:10.123" endtime="20240315 14:31:15.456"/>
+    </test>
+    
+    <status status="PASS" starttime="20240315 14:31:00.123" endtime="20240315 14:32:30.789"/>
+  </suite>
+  
+  <statistics>
+    <total>
+      <stat pass="11" fail="0" skip="0">All Tests</stat>
+    </total>
+    <tag>
+      <stat pass="6" fail="0" skip="0">smoke</stat>
+      <stat pass="5" fail="0" skip="0">workflow</stat>
+      <stat pass="2" fail="0" skip="0">critical</stat>
+    </tag>
+    <suite>
+      <stat pass="6" fail="0" skip="0" id="s1" name="Smoke Tests">Smoke Tests</stat>
+      <stat pass="5" fail="0" skip="0" id="s2" name="User Workflow Tests">User Workflow Tests</stat>
+    </suite>
+  </statistics>
+  
+  <errors>
+  </errors>
+</robot> 

@@ -1,0 +1,177 @@
+name: Robot Framework Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  robot-tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.9]
+
+    services:
+      # Додаємо Node.js додаток як сервіс
+      app:
+        image: node:18
+        options: --health-cmd="curl -f http://localhost:5173 || exit 1" --health-interval=30s --health-timeout=10s --health-retries=3
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "yarn"
+
+      - name: Install Node.js dependencies
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Build application
+        run: |
+          yarn build
+
+      - name: Start application in background
+        run: |
+          yarn dev &
+          sleep 30  # Дає час додатку запуститися
+          curl -f http://localhost:5173 || exit 1  # Перевіряємо, що додаток запущений
+        env:
+          NODE_ENV: test
+
+      - name: Install Robot Framework dependencies
+        run: |
+          cd robot-tests
+          pip install -r requirements.txt
+
+      - name: Install Chrome and ChromeDriver
+        run: |
+          # Встановлюємо Chrome
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+          # Встановлюємо ChromeDriver через Python
+          python -c "from webdriver_manager.chrome import ChromeDriverManager; ChromeDriverManager().install()"
+
+      - name: Run Robot Framework Tests
+        run: |
+          cd robot-tests
+          robot \
+            --variable HEADLESS:True \
+            --variable BASE_URL:http://localhost:5173 \
+            --outputdir reports \
+            --xunit xunit.xml \
+            --log log.html \
+            --report report.html \
+            testcases/
+        continue-on-error: true
+
+      - name: Upload Robot Framework Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: robot-framework-reports
+          path: |
+            robot-tests/reports/
+            robot-tests/log.html
+            robot-tests/report.html
+            robot-tests/output.xml
+            robot-tests/xunit.xml
+
+      - name: Publish Test Results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Robot Framework Tests
+          path: robot-tests/xunit.xml
+          reporter: java-junit
+          fail-on-error: false
+
+      - name: Generate Test Summary
+        if: always()
+        run: |
+          cd robot-tests
+          echo "## Robot Framework Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f "output.xml" ]; then
+            # Витягуємо базову статистику з output.xml
+            echo "### Test Statistics" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Простий парсинг XML для статистики
+            total_tests=$(grep -o '<total>.*</total>' output.xml | head -1 | sed 's/<[^>]*>//g' || echo "0")
+            passed_tests=$(grep -o '<pass>.*</pass>' output.xml | head -1 | sed 's/<[^>]*>//g' || echo "0")
+            failed_tests=$(grep -o '<fail>.*</fail>' output.xml | head -1 | sed 's/<[^>]*>//g' || echo "0")
+            
+            echo "- **Total Tests**: $total_tests" >> $GITHUB_STEP_SUMMARY
+            echo "- **Passed**: $passed_tests" >> $GITHUB_STEP_SUMMARY
+            echo "- **Failed**: $failed_tests" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            if [ "$failed_tests" -gt "0" ]; then
+              echo "❌ Some tests failed. Please check the detailed reports." >> $GITHUB_STEP_SUMMARY
+            else
+              echo "✅ All tests passed successfully!" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⚠️ Test results not found." >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Reports" >> $GITHUB_STEP_SUMMARY
+          echo "- Detailed reports are available in the artifacts section" >> $GITHUB_STEP_SUMMARY
+          echo "- Download the 'robot-framework-reports' artifact to view HTML reports" >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            let comment = '## 🤖 Robot Framework Test Results\n\n';
+
+            try {
+              // Читаємо результати якщо файл існує
+              const outputPath = 'robot-tests/output.xml';
+              if (fs.existsSync(outputPath)) {
+                comment += '✅ Tests executed successfully.\n';
+                comment += 'Detailed reports are available in the workflow artifacts.\n\n';
+              } else {
+                comment += '❌ Test execution failed or results not found.\n\n';
+              }
+            } catch (error) {
+              comment += '⚠️ Error reading test results.\n\n';
+            }
+
+            comment += '### 📊 Test Categories\n';
+            comment += '- **Smoke Tests**: Critical functionality verification\n';
+            comment += '- **User Workflow Tests**: End-to-end user scenarios\n\n';
+            comment += '### 📁 Available Reports\n';
+            comment += '- `report.html` - Summary report\n';
+            comment += '- `log.html` - Detailed execution log\n';
+            comment += '- `output.xml` - Raw test data\n';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
